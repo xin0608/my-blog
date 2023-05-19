@@ -1,0 +1,23 @@
+{
+  "id": "4075306",
+  "name": "myblog",
+  "font_family": "element-icons",
+  "css_prefix_text": "el-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2076271",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e892",
+      "unicode_decimal": 59538
+    },
+    {
+      "icon_id": "8106253",
+      "name": "save",
+      "font_class": "save",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    }
+  ]
+}

@@ -39,15 +39,16 @@
           >
         </el-menu>
         <el-row :gutter="20">
-          <el-col :span="16"
-            ><div
+          <el-col :span="16">
+            <router-link
               v-for="(item, index) in list"
               :key="index"
               class="grid-content"
+              :to="`/article/${item._id}`"
             >
+              <!-- 首页显示title，点击显示详情 -->
               {{ item.title }}
-              <p>{{ item.content }}</p>
-            </div>
+            </router-link>
           </el-col>
           <el-col :span="8">
             <el-aside width="100px">
@@ -75,7 +76,13 @@ export default {
   },
   async mounted() {
     const res = await get("/api/article");
-    this.list = res.data;
+    // 过滤掉草稿文章
+    res.data.map((item) => {
+      if (!item.isDraft) {
+        this.list.push(item);
+      }
+    });
+    // this.list = res.data;
     console.log(this.list);
   },
   methods: {
@@ -83,7 +90,6 @@ export default {
       console.log(key, keyPath);
     },
     async handleToCreate() {
-      // const router = useRouter();
       this.$router.push("/article");
     },
     handleToArticleList() {
@@ -168,6 +174,7 @@ export default {
       }
 
       .grid-content {
+        display: block;
         margin-left: 10px;
         padding: 20px;
         border-radius: 4px;

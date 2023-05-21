@@ -26,6 +26,12 @@ const routes = [
 
     },
     {
+        path: '/article/:id',
+        name: 'ArticleDetail',
+        component: () => import(/* webpackChunkName: "articleDetail" */ '../views/articleDetail/ArticleDetail'),
+
+    },
+    {
         path: '/article-list',
         name: 'HandleArticle',
         component: () => import(/* webpackChunkName: "handleArticle" */ '../views/handleArticle/HandleArticle'),
@@ -42,6 +48,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "leaveComments" */ '../views/leaveComments/LeaveComments'),
 
     },
+
 ]
 
 const router = createRouter({

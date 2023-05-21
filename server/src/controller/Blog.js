@@ -3,16 +3,16 @@
 const Blog = require('../models/Blog');
 
 // 创建文章
-async function createArticel(username, title, content) {
-    const newArticle = await Blog.create({ username, title, content });
+async function createArticel(username, title, Htmlcontent, Markdowncontent, isDraft) {
+    const newArticle = await Blog.create({ username, title, Htmlcontent, Markdowncontent, isDraft });
     return newArticle;
 }
 
 // 修改文章
-async function updateArticle(id, title, content) {
+async function updateArticle(id, title, Htmlcontent, Markdowncontent, isDraft) {
     const article = await Blog.findOneAndUpdate(
         { _id: id },//查询的条件
-        { title, content },//更新的数据
+        { title, Htmlcontent, Markdowncontent, isDraft },//更新的数据
         { new: true }
     )
     return article;

@@ -5,13 +5,15 @@ const { createArticel, updateArticle, getArticleList, getArticleById, deleteArti
 
 router.prefix('/api/article')
 
+// RESTful API
+
 // 创建文章
 router.post('/', async (ctx, next) => {
     const username = ctx.session.userInfo.username;
-    const { title, content } = ctx.request.body;
+    const { title, Htmlcontent, Markdowncontent, isDraft } = ctx.request.body;
     //    创建时捕获异常
     try {
-        const newArticle = await createArticel(username, title, content);
+        const newArticle = await createArticel(username, title, Htmlcontent, Markdowncontent, isDraft);
         ctx.body = {
             errno: 0,
             data: newArticle
@@ -29,8 +31,8 @@ router.post('/', async (ctx, next) => {
 // 修改文章
 router.post('/:id', async (ctx, next) => {
     const id = ctx.params.id;
-    const { title, content } = ctx.request.body;
-    const newArticle = await updateArticle(id, title, content);
+    const { title, Htmlcontent, Markdowncontent, isDraft } = ctx.request.body;
+    const newArticle = await updateArticle(id, title, Htmlcontent, Markdowncontent, isDraft);
     ctx.body = {
         errno: 0,
         data: newArticle
@@ -41,6 +43,13 @@ router.post('/:id', async (ctx, next) => {
 router.delete('/:id', async (ctx, next) => {
     const id = ctx.params.id;
     await deleteArticleById(id);
+    // 返回新的文章列表
+    const username = ctx.session.userInfo.username;
+    const list = await getArticleList(username);
+    ctx.body = {
+        errno: 0,
+        data: list
+    }
 })
 
 // 查询文章列表

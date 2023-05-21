@@ -13,29 +13,102 @@
           <el-input placeholder="怎么称呼你呢..." v-model="input" clearable>
           </el-input>
           <div class="check">
-            悄悄话<input type="checkbox" />
-            <el-button type="danger" round>提交</el-button>
+            悄悄话<input
+              type="checkbox"
+              :checked="this.checked"
+              @click="handleCheck"
+            />
+            <el-button type="danger" round @click="handleSubmit"
+              >提交</el-button
+            >
           </div>
         </div>
       </el-header>
       <el-main
         ><div class="title">大家都在说</div>
-        <div class="item" v-for="(item, index) in list" :key="index">
-          {{ item }}
+        <div
+          class="item"
+          v-for="(item, index) in list"
+          :key="index"
+          @click="handleDelete"
+        >
+          <p>{{ item.commentator }}</p>
+          <p>{{ item.comment }}</p>
+          <!-- 游客不显示全部delete，只显示自己的评论的delete -->
+          <span><i class="el-icon-delete" :aid="item._id"></i></span>
         </div>
       </el-main>
     </el-container>
   </div>
 </template>
 <script>
+import { post, get, del } from "../../utils/request";
+
+const createComment = async (username, comment, commentator, isAnonymous) => {
+  const result = await post("/api/comment", {
+    username,
+    comment,
+    commentator,
+    isAnonymous,
+  });
+  console.log(result);
+  if (result.errno === 0) return true;
+  else return false;
+};
 export default {
   name: "LeaveComments",
   data() {
     return {
       textarea: "",
       input: "",
-      list: [1, 2, 2, 3, 3, 4],
+      checked: false,
+      list: [],
+      aid: 0,
     };
+  },
+  async mounted() {
+    const res = await get("/api/comment");
+    this.list = res.data;
+  },
+  methods: {
+    handleCheck() {
+      this.checked = !this.checked;
+    },
+    async handleSubmit() {
+      const username = localStorage.username; //博客用户
+      const comment = this.textarea; //留言
+      let commentator; //留言人
+      // 是否匿名
+      const isAnonymous = this.checked;
+
+      if (isAnonymous) {
+        commentator = "匿名";
+      } else {
+        commentator = this.input;
+      }
+      const result = createComment(username, comment, commentator, isAnonymous);
+      if (result) {
+        this.$message({
+          message: "发布成功",
+          type: "success",
+        });
+        const res = await get("/api/comment");
+        this.list = res.data;
+      } else {
+        this.$message.error("发布失败");
+      }
+    },
+    async handleDelete(e) {
+      // 获取事件源元素的aid属性
+      let id = e.target.getAttribute("aid");
+      const username = localStorage.username; //博客用户
+
+      if (e.target.className.includes("delete")) {
+        const res = await del(`/api/comment/${id}`, { username });
+        // 重新渲染
+        this.list = res.data;
+      }
+    },
   },
 };
 </script>

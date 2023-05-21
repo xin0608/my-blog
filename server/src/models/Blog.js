@@ -1,12 +1,18 @@
 // Blog Model
 const mongoose = require('../db/db');
 
-// ① 博客表blog（blogId，title，content，postTime，userId）
+
 const Schema = mongoose.Schema({
     title: String,
-    content: String,
+    Htmlcontent: String,
+    Markdowncontent: String,
     username: {
         type: String,
+        required: true
+    },
+    isDraft://是否是草稿
+    {
+        type: Boolean,
         required: true
     }
 }, { timestamps: true });

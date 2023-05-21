@@ -2,8 +2,8 @@
   <div>
     <link rel="stylesheet" href="/static/editor.md/css/editormd.css" />
     <!-- editormd -->
-    <button id="get-md-btn">Get Markdown</button>
-    <button id="get-html-btn">Get HTML</button>
+    <!-- <button id="get-md-btn">Get Markdown</button>
+    <button id="get-html-btn">Get HTML</button> -->
     <div id="editor" style="z-index: 10" />
   </div>
 </template>
@@ -55,10 +55,10 @@ export default {
             imageUpload: true,
             saveHTMLToTextarea: true,
             // 可分区域定制样式主题
-            theme: localStorage.theme ? localStorage.theme : "dark",
+            theme: localStorage.theme ? localStorage.theme : "light",
             editorTheme: localStorage.editorTheme
               ? localStorage.editorTheme
-              : "3024-night",
+              : "light",
             previewTheme: localStorage.previewTheme
               ? localStorage.previewTheme
               : "default",
